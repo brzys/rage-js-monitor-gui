@@ -1,6 +1,6 @@
 import './App.less';
-
-import { Layout, Menu, Typography, Col, Divider, Table } from 'antd';
+import React from 'react';
+import { Layout, Menu, Typography, Row, Col, Divider, Table, Slider, InputNumber } from 'antd';
 import Icon, { UserOutlined, DatabaseOutlined, SettingOutlined } from '@ant-design/icons';
 
 import { RageLogo } from './RageLogo';
@@ -13,29 +13,48 @@ const { Column } = Table;
 const data = [
   {
     key: '1',
-    firstName: 'John',
-    lastName: 'Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-    tags: ['nice', 'developer'],
-  },
-  {
-    key: '2',
-    firstName: 'Jim',
-    lastName: 'Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-    tags: ['loser'],
-  },
-  {
-    key: '3',
-    firstName: 'Joe',
-    lastName: 'Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
+    name: 'mp.events.add',
+    execution: 20,
+    calls: 300,
+  }
 ];
+
+class IntegerStep extends React.Component {
+  state = {
+    inputValue: 1,
+  };
+
+  onChange = (value: number) => {
+    this.setState({
+      inputValue: value,
+    });
+  };
+
+  render() {
+    const { inputValue } = this.state;
+    return (
+      <Row>
+        <Col span={12}>
+          <Slider
+            min={1}
+            max={20}
+            onChange={this.onChange}
+            value={typeof inputValue === 'number' ? inputValue : 0}
+          />
+        </Col>
+        <Col span={4}>
+          <InputNumber
+            min={1}
+            max={20}
+            style={{ margin: '0 16px' }}
+            value={inputValue}
+            onChange={this.onChange}
+          />
+        </Col>
+      </Row>
+    );
+  }
+}
 
 const App = () => (
   <Layout>
@@ -83,9 +102,13 @@ const App = () => (
       </Sider>
 
       <Content style={{ background: 'rgb(40, 40, 40)' }}>
+        <Text>History time</Text>
+        <IntegerStep />
+
         <Table dataSource={data}>
-          <Column title="Function name" dataIndex="firstName" key="firstName" />
-          <Column title="Execution time" dataIndex="lastName" key="lastName" />
+          <Column title="Name" dataIndex="name" key="name" />
+          <Column title="Execution time" dataIndex="execution" key="execution" />
+          <Column title="Calls" dataIndex="calls" key="calls" />
         </Table>
       </Content>
     </Layout>
